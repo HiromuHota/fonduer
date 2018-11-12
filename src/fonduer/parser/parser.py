@@ -213,7 +213,7 @@ class ParserUDF(UDF):
         # Only return sentences, if no exceptions occur during parsing
         try:
             return_sentences = []
-            if self.visual:
+            if False:
                 # Use the provided pdf_path if present
                 self.pdf_path = pdf_path if pdf_path else self.pdf_path
                 if not self.pdf_path:
@@ -580,6 +580,20 @@ class ParserUDF(UDF):
                         parts["col_end"] = parent.cell.col_end
                 else:
                     raise NotImplementedError("Sentence parent must be Paragraph.")
+            if self.visual:
+                parts["page"] = [1 for x in range(len(parts["words"]))]
+                parts["top"] = [
+                    int(node.get("ymin")) for x in range(len(parts["words"]))
+                ]
+                parts["bottom"] = [
+                    int(node.get("ymax")) for x in range(len(parts["words"]))
+                ]
+                parts["left"] = [
+                    int(node.get("xmin")) for x in range(len(parts["words"]))
+                ]
+                parts["right"] = [
+                    int(node.get("xmax")) for x in range(len(parts["words"]))
+                ]
             yield Sentence(**parts)
             state["sentence"]["idx"] += 1
 
