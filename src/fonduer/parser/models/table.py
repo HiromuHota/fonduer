@@ -99,6 +99,11 @@ class Cell(Context):
     #: The end index of the column in the ``Table`` the ``Cell`` is in.
     col_end = Column(Integer)
 
+    top = Column(Integer)
+    left = Column(Integer)
+    bottom = Column(Integer)
+    right = Column(Integer)
+
     __mapper_args__ = {"polymorphic_identity": "cell"}
 
     __table_args__ = (UniqueConstraint(document_id, table_id, position),)
