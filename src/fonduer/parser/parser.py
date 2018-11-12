@@ -379,6 +379,10 @@ class ParserUDF(UDF):
             parts["row_end"] = row_end
             parts["col_start"] = col_start
             parts["col_end"] = col_end
+            parts["top"] = int(node.get("ymin"))
+            parts["bottom"] = int(node.get("ymax"))
+            parts["left"] = int(node.get("xmin"))
+            parts["right"] = int(node.get("xmax"))
             parts["position"] = state["table"][state["parent"][node].position][
                 "cell_pos"
             ]
