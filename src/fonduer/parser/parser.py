@@ -379,10 +379,16 @@ class ParserUDF(UDF):
             parts["row_end"] = row_end
             parts["col_start"] = col_start
             parts["col_end"] = col_end
+            # Pixel bbox
             parts["top"] = int(node.get("ymin"))
             parts["bottom"] = int(node.get("ymax"))
             parts["left"] = int(node.get("xmin"))
             parts["right"] = int(node.get("xmax"))
+            # Grid bbox
+            parts["gtop"] = int(node.get("gymin"))
+            parts["gbottom"] = int(node.get("gymax"))
+            parts["gleft"] = int(node.get("gxmin"))
+            parts["gright"] = int(node.get("gxmax"))
             parts["position"] = state["table"][state["parent"][node].position][
                 "cell_pos"
             ]

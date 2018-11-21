@@ -103,10 +103,17 @@ class Cell(Context):
     #: The end index of the column in the ``Table`` the ``Cell`` is in.
     col_end = Column(Integer)
 
+    # Pixel bounding box
     top = Column(Integer)
     left = Column(Integer)
     bottom = Column(Integer)
     right = Column(Integer)
+
+    # Grid bounding box
+    gtop = Column(Integer)
+    gleft = Column(Integer)
+    gbottom = Column(Integer)
+    gright = Column(Integer)
 
     __mapper_args__ = {"polymorphic_identity": "cell"}
 
