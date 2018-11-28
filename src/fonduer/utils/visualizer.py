@@ -42,6 +42,7 @@ class Visualizer(object):
             img = pdf_to_img(pdf_file, page_num)
             draw = Drawing()
             draw.fill_color = Color("rgba(0, 0, 0, 0.0)")
+            draw.stroke_width = 4
             for j, (top, left, bottom, right) in enumerate(boxes_by_page[page_num]):
                 draw.stroke_color = colors[j % 2] if alternate_colors else colors[0]
                 draw.rectangle(left=left, top=top, right=right, bottom=bottom)
