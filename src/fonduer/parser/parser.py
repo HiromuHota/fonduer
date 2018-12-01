@@ -379,6 +379,8 @@ class ParserUDF(UDF):
             parts["row_end"] = row_end
             parts["col_start"] = col_start
             parts["col_end"] = col_end
+            # cellId (numbering is from DTM)
+            parts["cell_id"] = int(node.get("cellid"))
             # Pixel bbox
             parts["top"] = int(node.get("ymin"))
             parts["bottom"] = int(node.get("ymax"))
