@@ -38,8 +38,7 @@ def same_table(c):
     :rtype: boolean
     """
     return all(
-        _to_span(c[i]).sentence.is_tabular()
-        and _to_span(c[i]).sentence.table == _to_span(c[0]).sentence.table
+        _to_span(c[i]).cell.table == _to_span(c[0]).cell.table
         for i in range(len(c))
     )
 
