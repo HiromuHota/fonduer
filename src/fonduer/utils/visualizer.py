@@ -57,7 +57,7 @@ class Visualizer(object):
         """
         if not pdf_file:
             pdf_file = os.path.join(
-                self.pdf_path, candidates[0][0].context.sentence.document.name
+                self.pdf_path, candidates[0][0].context.cell.document.name
             )
             if os.path.isfile(pdf_file + ".pdf"):
                 pdf_file += ".pdf"
@@ -91,13 +91,14 @@ class Visualizer(object):
         return display(*imgs)
 
 
-def get_box(span):
+def get_box(context):
+    cell = context.cell
     box = (
-        min(span.get_attrib_tokens("page")),
-        min(span.get_attrib_tokens("top")),
-        max(span.get_attrib_tokens("left")),
-        min(span.get_attrib_tokens("bottom")),
-        max(span.get_attrib_tokens("right")),
+        1,
+        cell.top,
+        cell.left,
+        cell.bottom,
+        cell.right,
     )
     return box
 
