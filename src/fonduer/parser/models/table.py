@@ -99,9 +99,6 @@ class Cell(Context):
     #: The end index of the column in the ``Table`` the ``Cell`` is in.
     col_end = Column(Integer)
 
-    # cellId (numbering is from DTM)
-    cell_id = Column(Integer)
-
     # Pixel bounding box
     top = Column(Integer)
     left = Column(Integer)
