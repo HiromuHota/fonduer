@@ -25,6 +25,7 @@ from fonduer.parser.simple_tokenizer import SimpleTokenizer
 from fonduer.parser.spacy_parser import Spacy
 from fonduer.parser.visual_linker import VisualLinker
 from fonduer.utils.udf import UDF, UDFRunner
+from sqlalchemy import MetaData
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +116,12 @@ class Parser(UDFRunner):
 
         :param pdf_path: This parameter is ignored.
         """
-        self.session.query(Context).delete(synchronize_session="fetch")
+        self.logger.info("Clearing everything...")
+        engine = self.session.get_bind()
+        meta = MetaData(bind=engine, reflect=True)
+        for table in reversed(meta.sorted_tables):
+            self.session.execute(table.delete())
+        self.session.commit()
 
     def get_last_documents(self):
         """Return the most recently parsed list of ``Documents``.
