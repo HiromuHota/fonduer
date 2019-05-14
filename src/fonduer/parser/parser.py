@@ -595,16 +595,16 @@ class ParserUDF(UDF):
             if self.visual:
                 parts["page"] = [1 for x in range(len(parts["words"]))]
                 parts["top"] = [
-                    int(node.get("ymin")) for x in range(len(parts["words"]))
+                    int(float(node.get("ymin"))) for x in range(len(parts["words"]))
                 ]
                 parts["bottom"] = [
-                    int(node.get("ymax")) for x in range(len(parts["words"]))
+                    int(float(node.get("ymax"))) for x in range(len(parts["words"]))
                 ]
                 parts["left"] = [
-                    int(node.get("xmin")) for x in range(len(parts["words"]))
+                    int(float(node.get("xmin"))) for x in range(len(parts["words"]))
                 ]
                 parts["right"] = [
-                    int(node.get("xmax")) for x in range(len(parts["words"]))
+                    int(float(node.get("xmax"))) for x in range(len(parts["words"]))
                 ]
             yield Sentence(**parts)
             state["sentence"]["idx"] += 1
