@@ -592,7 +592,7 @@ class ParserUDF(UDF):
                         parts["col_end"] = parent.cell.col_end
                 else:
                     raise NotImplementedError("Sentence parent must be Paragraph.")
-            if self.visual:
+            if self.visual and node.get("ymin"):
                 parts["page"] = [1 for x in range(len(parts["words"]))]
                 parts["top"] = [
                     int(float(node.get("ymin"))) for x in range(len(parts["words"]))
