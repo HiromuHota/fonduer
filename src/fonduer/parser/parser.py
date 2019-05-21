@@ -593,8 +593,11 @@ class ParserUDF(UDF):
                 else:
                     raise NotImplementedError("Sentence parent must be Paragraph.")
             if self.visual and node.get("ymin"):
-                # TODO extract the page number correctly
-                parts["page"] = [1 for x in range(len(parts["words"]))]
+                # Find the page/doc node up in the doc tree
+                page = next(node.iterancestors('page'))
+                doc = next(node.iterancestors('doc'))
+                # doc.index(page) returns the position (starting from 0) of page within the doc
+                parts["page"] = [doc.index(page) + 1 for x in range(len(parts["words"]))]
                 parts["top"] = [
                     int(float(node.get("ymin"))) for x in range(len(parts["words"]))
                 ]
