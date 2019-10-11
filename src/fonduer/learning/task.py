@@ -38,6 +38,14 @@ def create_task(
     task_names, n_arites, n_features, n_classes, emb_layer, mode="mtl", model="LSTM"
 ):
 
+    if model not in ["LSTM", "LogisticRegression"]:
+        raise ValueError(
+            f"Unrecognized model {model}. Only support {['LSTM', 'LogisticRegression']}"
+        )
+
+    config = get_config()["learning"][model]
+    logger.info(f"{model} model config: {config}")
+
     if not isinstance(task_names, list):
         task_names = [task_names]
         n_arites = [n_arites]
@@ -47,11 +55,13 @@ def create_task(
 
     for task_name, n_arity, n_class in zip(task_names, n_arites, n_classes):
         if model == "LSTM":
-            config = get_config()["learning"][model]
-            logger.info(f"{model} model config: {config}")
-
             module_pool = nn.ModuleDict(
-                {"emb": emb_layer, "feature": SparseLinear(n_features + 1, n_class)}
+                {
+                    "emb": emb_layer,
+                    "feature": SparseLinear(
+                        n_features + 1, n_class, bias=config["bias"]
+                    ),
+                }
             )
             for i in range(n_arity):
                 module_pool.update(
@@ -105,12 +115,11 @@ def create_task(
                 }
             ]
         elif model == "LogisticRegression":
-            config = get_config()["learning"][model]
-            logger.info(f"{model} model config: {config}")
-
             module_pool = nn.ModuleDict(
                 {
-                    "feature": SparseLinear(n_features + 1, n_class),
+                    "feature": SparseLinear(
+                        n_features + 1, n_class, bias=config["bias"]
+                    ),
                     f"{task_name}_pred_head": Sum_module(["feature"]),
                 }
             )

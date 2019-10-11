@@ -46,7 +46,6 @@ class FonduerDataset(EmmentalDataset):
         return x_dict, y_dict
 
     def _map_to_id(self):
-        print(self.candidates[0])
         self.X_dict = dict([(f"m{i}", []) for i in range(len(self.candidates[0]))])
 
         for candidate in self.candidates:
