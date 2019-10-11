@@ -63,6 +63,90 @@ Added
 
 Changed
 ^^^^^^^
+* `@senwu`_: Switch to Emmental as the default learning engine.
+
+.. note::
+
+    Instead of owning Fonduer learning engine, we switch to Emmental which is a deep learning
+    framework for multi-task learning. This change can give Fonduer more power to support more
+    applications. Example usage:
+
+    .. code:: python
+
+        import emmental
+
+        # Collect word counter from candidates
+        word_counter = collect_word_counter(train_cands)
+
+        emmental.init(fonduer.Meta.log_path)
+
+        # Geneate special tokens
+        arity = 2
+        specials = []
+        for i in range():
+            specials += [f"~~[[{i}", f"{i}]]~~"]
+
+        # Generate word embedding module
+        emb_layer = EmbeddingModule(
+            word_counter=word_counter, word_dim=300, specials=specials
+        )
+
+        # Only use the samples that have labels
+        diffs = train_marginals.max(axis=1) - train_marginals.min(axis=1)
+        train_idxs = np.where(diffs > 1e-6)[0]
+
+        # Build training dataloader
+        train_dataloader = EmmentalDataLoader(
+            task_to_label_dict={ATTRIBUTE: "labels"},
+            dataset=FonduerDataset(
+                ATTRIBUTE,
+                train_cands[0],
+                F_train[0],
+                emb_layer.word2id,
+                train_marginals,
+                train_idxs,
+            ),
+            split="train",
+            batch_size=100,
+            shuffle=True,
+        )
+
+        # Create task
+        tasks = create_task(
+            ATTRIBUTE,
+            2,
+            F_train[0].shape[1],
+            2,
+            emb_layer,
+            mode="mtl",
+            model="LogisticRegression",
+        )
+
+        # Create Emmental model
+        model = EmmentalModel(name=f"{ATTRIBUTE}_task")
+
+        for task in tasks:
+            model.add_task(task)
+
+        # Learning
+        emmental_learner = EmmentalLearner()
+        emmental_learner.learn(model, [train_dataloader])
+
+        # Build test dataloader
+        test_dataloader = EmmentalDataLoader(
+            task_to_label_dict={ATTRIBUTE: "labels"},
+            dataset=FonduerDataset(
+                ATTRIBUTE, test_cands[0], F_test[0], emb_layer.word2id, 2
+            ),
+            split="test",
+            batch_size=100,
+            shuffle=False,
+        )
+
+        # Inference
+        test_preds = model.predict(test_dataloader, return_preds=True)
+
+
 * `@HiromuHota`_: Load a spaCy model if possible during `Spacy#__init__`.
 * `@HiromuHota`_: Rename Spacy to SpacyParser.
 * `@HiromuHota`_: Rename SimpleTokenizer into SimpleParser and let it inherit LingualParser.
