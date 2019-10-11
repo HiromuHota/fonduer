@@ -71,7 +71,6 @@ before_install:
 # Install PyTorch for Linux with no CUDA support
 - |
   if [ "$TRAVIS_OS_NAME" = "linux" ]; then
-    pip install torch==1.3.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
     pip install Wand
     sudo apt-get install libmagickwand-dev ghostscript
     sudo rm -rf /etc/ImageMagick-6/policy.xml
