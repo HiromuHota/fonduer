@@ -16,6 +16,7 @@ setup(
     install_requires=[
         "beautifulsoup4==4.7.1",
         "editdistance>=0.5.2, <0.6.0",
+        "emmental @ git+https://github.com/SenWu/emmental.git@contrib",
         "lxml>=4.2.5, <5.0.0",
         "numpy>=1.11, <2.0",
         "pyyaml>=4.2b1, <5.0",
@@ -23,8 +24,7 @@ setup(
         "snorkel-metal>=0.4.1, <0.5.0",
         "spacy>=2.1.3, <2.2.0",
         "sqlalchemy[postgresql_psycopg2binary]>=1.2.12, <2.0.0",
-        "tensorboardX>=1.6, <2.0",
-        "torch>=1.1.0,<1.2.0",
+        "torch>=1.2.0,<1.3.0",
         "tqdm>=4.26.0, <5.0.0",
         "treedlib>=0.1.1, <0.2.0",
         "wand>=0.4.4, <0.5.0",
