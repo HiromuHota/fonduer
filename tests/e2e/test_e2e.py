@@ -16,11 +16,9 @@ from fonduer.candidates import CandidateExtractor, MentionExtractor
 from fonduer.candidates.models import candidate_subclass, mention_subclass
 from fonduer.features import Featurizer
 from fonduer.features.models import Feature, FeatureKey
-from fonduer.learning.disc_models.utils import (
-    FonduerDataset,
-    collect_word_counter,
-    create_task,
-)
+from fonduer.learning.dataset import FonduerDataset
+from fonduer.learning.task import create_task
+from fonduer.learning.utils import collect_word_counter
 from fonduer.parser import Parser
 from fonduer.parser.models import Document, Sentence
 from fonduer.parser.preprocessors import HTMLDocPreprocessor
