@@ -16,7 +16,7 @@ setup(
     install_requires=[
         "beautifulsoup4==4.7.1",
         "editdistance>=0.5.2, <0.6.0",
-        "emmental @ git+https://github.com/SenWu/emmental.git@contrib",
+        "emmental @ git+https://github.com/SenWu/emmental.git@master",
         "lxml>=4.2.5, <5.0.0",
         "numpy>=1.11, <2.0",
         "pyyaml>=4.2b1, <5.0",
