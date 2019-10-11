@@ -1,15 +1,19 @@
 import collections
 import logging
-from typing import Set, Tuple
+from typing import Dict, List, Set, Tuple, Union
 
 import numpy as np
+from sqlalchemy.orm import Session
 
+from fonduer.candidates.models import Candidate, Mention
 from fonduer.learning.models.marginal import Marginal
 
 logger = logging.getLogger(__name__)
 
 
-def save_marginals(session, X, marginals, training=True):
+def save_marginals(
+    session, X: List[Candidate], marginals: Session, training: bool = True
+):
     """Save marginal probabilities for a set of Candidates to db.
 
     :param X: A list of arbitrary objects with candidate ids accessible via a
@@ -92,7 +96,9 @@ def confusion_matrix(pred: Set, gold: Set) -> Tuple[Set, Set, Set]:
     return (TP, FP, FN)
 
 
-def mention_to_tokens(mention, token_type="words", lowercase=False):
+def mention_to_tokens(
+    mention: Mention, token_type: str = "words", lowercase: str = False
+) -> List[str]:
     """
     Extract tokens from the mention
 
@@ -109,7 +115,7 @@ def mention_to_tokens(mention, token_type="words", lowercase=False):
     return [w.lower() if lowercase else w for w in tokens]
 
 
-def mark(l, h, idx):
+def mark(l: int, h: int, idx: int) -> List[Tuple[int, str]]:
     """
     Produce markers based on argument positions
 
@@ -126,7 +132,7 @@ def mark(l, h, idx):
     return [(l, f"~~[[{idx}"), (h + 1, f"{idx}]]~~")]
 
 
-def mark_sentence(s, args):
+def mark_sentence(s: List[str], args: List[Tuple[int, int, int]]) -> List[str]:
     """Insert markers around relation arguments in word sequence
 
     :param s: list of tokens in sentence.
@@ -148,7 +154,9 @@ def mark_sentence(s, args):
     return x
 
 
-def collect_word_counter(candidates):
+def collect_word_counter(
+    candidates: Union[List[Candidate], List[List[Candidate]]]
+) -> Dict:
     """Collect word counter from candidates
 
     :param candidates: The candidates used to collect word counter.

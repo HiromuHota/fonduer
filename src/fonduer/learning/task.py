@@ -1,12 +1,15 @@
 import logging
 from functools import partial
+from typing import Any, Dict, List, Union
 
 import torch.nn as nn
 import torch.nn.functional as F
+from emmental.modules.embedding_module import EmbeddingModule
 from emmental.modules.rnn_module import RNN
 from emmental.modules.sparse_linear_module import SparseLinear
 from emmental.scorer import Scorer
 from emmental.task import EmmentalTask
+from torch import Tensor
 
 from fonduer.learning.modules.soft_cross_entropy_loss import SoftCrossEntropyLoss
 from fonduer.learning.modules.sum_module import Sum_module
@@ -18,7 +21,14 @@ logger = logging.getLogger(__name__)
 sce_loss = SoftCrossEntropyLoss()
 
 
-def loss(module_name, intermediate_output_dict, Y, active):
+def loss(
+    module_name: str,
+    intermediate_output_dict: Dict[
+        str, Union[Dict[str, Union[Tensor, List[Any]]], List[Tensor]]
+    ],
+    Y: Tensor,
+    active: Tensor,
+) -> Tensor:
     if len(Y.size()) == 1:
         label = intermediate_output_dict[module_name][0].new_zeros(
             intermediate_output_dict[module_name][0].size()
@@ -30,13 +40,24 @@ def loss(module_name, intermediate_output_dict, Y, active):
     return sce_loss(intermediate_output_dict[module_name][0][active], label[active])
 
 
-def output(module_name, intermediate_output_dict):
+def output(
+    module_name: str,
+    intermediate_output_dict: Dict[
+        str, Union[Dict[str, Union[Tensor, List[Any]]], List[Tensor]]
+    ],
+) -> Tensor:
     return F.softmax(intermediate_output_dict[module_name][0])
 
 
 def create_task(
-    task_names, n_arites, n_features, n_classes, emb_layer, mode="mtl", model="LSTM"
-):
+    task_names: Union[str, List[str]],
+    n_arites: Union[int, List[int]],
+    n_features: int,
+    n_classes: Union[int, List[int]],
+    emb_layer: EmbeddingModule,
+    mode: str = "mtl",
+    model: str = "LSTM",
+) -> List[EmmentalTask]:
 
     if model not in ["LSTM", "LogisticRegression"]:
         raise ValueError(
