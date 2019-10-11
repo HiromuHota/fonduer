@@ -78,7 +78,7 @@ before_install:
 
 install:
 # Install fonduer dev deps and check code style
-- make -s dev_extra > /dev/null
+- make -s dev_extra
 - make check
 - make docs
 - pip install -q coveralls
