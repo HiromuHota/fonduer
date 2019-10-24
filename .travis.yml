@@ -66,8 +66,8 @@ before_install:
     pg_ctl -D /usr/local/var/postgres start; sleep 5
     createuser -s postgres
     # poppler-utils is already installed
-    # SSL 1.1 for psycopg
-    brew upgrade openssl
+    # OpenSSL 1.1 to build psycopg2 from source
+    brew install openssl
   fi
 - pdfinfo -v
 - psql --version
