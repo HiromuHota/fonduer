@@ -67,7 +67,7 @@ before_install:
     createuser -s postgres
     # poppler-utils is already installed
     # OpenSSL 1.1 to build psycopg2 from source
-    brew install openssl
+    brew install openssl@1.1
   fi
 - pdfinfo -v
 - psql --version
