@@ -66,8 +66,6 @@ before_install:
     pg_ctl -D /usr/local/var/postgres start; sleep 5
     createuser -s postgres
     # poppler-utils is already installed
-    # OpenSSL 1.1 to build psycopg2 from source
-    brew install openssl@1.1
   fi
 - pdfinfo -v
 - psql --version
@@ -83,6 +81,8 @@ before_install:
 
 install:
 # Install fonduer dev deps and check code style
+- echo $LIBRARY_PATH
+- export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl@1.1/lib/
 - make -s dev_extra
 - make check
 - make docs
