@@ -19,5 +19,7 @@ def test_meta_connection_strings(caplog):
 
     Meta.init("postgresql://localhost:5432/" + DB).Session()
     assert Meta.DBNAME == DB
+    Meta.engine.dispose()
     Meta.init("postgresql://localhost:5432/" + "cand_test").Session()
     assert Meta.DBNAME == "cand_test"
+    Meta.engine.dispose()
