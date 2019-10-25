@@ -84,6 +84,7 @@ before_install:
 
 install:
 # Install fonduer dev deps and check code style
+- pip install psycopg2==2.8.3
 - make -s dev_extra
 - make check
 - make docs
