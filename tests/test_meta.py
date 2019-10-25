@@ -17,9 +17,9 @@ def test_meta_connection_strings(caplog):
     with pytest.raises(ValueError):
         Meta.init("postgresql://somethingsilly:5432/").Session()
 
-    Meta.init("postgresql://127.0.0.1:5432/" + DB).Session()
+    Meta.init("postgresql://localhost:5432/" + DB).Session()
     assert Meta.DBNAME == DB
     Meta.engine.dispose()
-    Meta.init("postgresql://127.0.0.1:5432/" + "cand_test").Session()
+    Meta.init("postgresql://localhost:5432/" + "cand_test").Session()
     assert Meta.DBNAME == "cand_test"
     Meta.engine.dispose()
