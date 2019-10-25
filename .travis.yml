@@ -89,7 +89,14 @@ before_install:
 
 install:
 # Install fonduer dev deps and check code style
-- pip install psycopg2==2.8.3
+- wget https://files.pythonhosted.org/packages/84/d7/6a93c99b5ba4d4d22daa3928b983cec66df4536ca50b22ce5dcac65e4e71/psycopg2-2.8.4.tar.gz
+- tar -xvf psycopg2-2.8.4.tar.gz
+- cd psycopg2-2.8.4
+- sed -i -e 's/define =/define = PSYCOPG_DEBUG/' setup.cfg
+- cat setup.cfg
+- export PSYCOPG_DEBUG=1
+- python setup.py build
+- python setup.py install
 - make -s dev_extra
 - make check
 - make docs
