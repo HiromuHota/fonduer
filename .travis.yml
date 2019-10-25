@@ -115,7 +115,7 @@ before_script:
 - cd tests && ./download_data.sh && cd ..
 
 script:
-- PSYCOPG_DEBUG=1 pytest
+- PSYCOPG_DEBUG=1 pytest -s
 
 after_success:
 - coveralls
