@@ -8,8 +8,10 @@ from urllib.parse import urlparse
 
 import sqlalchemy
 from sqlalchemy import create_engine
+from sqlalchemy.engine import Engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 
 logger = logging.getLogger(__name__)
 
@@ -59,18 +61,13 @@ def init_logging(
 
 
 # Defines procedure for setting up a sessionmaker
-def new_sessionmaker() -> sessionmaker:
+def new_sessionmaker() -> Engine:
     # Turning on autocommit for Postgres, see
     # http://oddbird.net/2014/06/14/sqlalchemy-postgres-autocommit/
     # Otherwise any e.g. query starts a transaction, locking tables... very
     # bad for e.g. multiple notebooks open, multiple processes, etc.
     try:
-        engine = create_engine(
-            Meta.conn_string,
-            client_encoding="utf8",
-            use_batch_mode=True,
-            isolation_level="AUTOCOMMIT",
-        )
+        engine = get_engine()
         engine.connect()
     except sqlalchemy.exc.OperationalError as e:
         raise ValueError(
@@ -88,6 +85,16 @@ def new_sessionmaker() -> sessionmaker:
         )
     # New sessionmaker
     return sessionmaker(bind=engine)
+
+
+def get_engine() -> Engine:
+    return create_engine(
+        Meta.conn_string,
+        client_encoding="utf8",
+        use_batch_mode=True,
+        isolation_level="AUTOCOMMIT",
+        poolclass=NullPool,
+    )
 
 
 def _update_meta(conn_string: str) -> None:

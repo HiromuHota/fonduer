@@ -3,9 +3,9 @@ from multiprocessing import Manager, Process
 from queue import Empty, Queue
 from typing import Any, Collection, Dict, Iterator, List, Optional, Set, Type
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 
-from fonduer.meta import Meta, new_sessionmaker
+from fonduer.meta import Meta, get_engine
 from fonduer.parser.models.document import Document
 
 try:
@@ -177,7 +177,9 @@ class UDF(Process):
         """
         # Each UDF starts its own Engine
         # See SQLalchemy, using connection pools with multiprocessing.
-        Session = new_sessionmaker()
+        engine = get_engine()
+        connection = engine.connect()
+        Session = sessionmaker(bind=engine)
         self.session = Session()
         while True:
             try:
@@ -188,6 +190,8 @@ class UDF(Process):
                 break
         self.session.commit()
         self.session.close()
+        connection.close()
+        engine.dispose()
 
     def apply(self, doc: Document, **kwargs: Any) -> Iterator[Meta.Base]:
         """This function takes in an object, and returns a generator / set / list"""
