@@ -98,7 +98,7 @@ install:
 - python setup.py build
 - python setup.py install
 - cd ..
-- pip install 'sqlalchemy[postgresql]>=1.2.12, <2.0.0'
+- rm -rf psycopg2-2.8.4
 - make -s dev_extra
 - make check
 - make docs
