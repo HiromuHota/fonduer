@@ -98,6 +98,7 @@ install:
 - python setup.py build
 - python setup.py install
 - cd ..
+- pip install 'sqlalchemy[postgresql]>=1.2.12, <2.0.0'
 - make -s dev_extra
 - make check
 - make docs
