@@ -1,5 +1,5 @@
 import logging
-from multiprocessing import Manager, Process
+from multiprocessing import Lock, Manager, Process
 from queue import Empty, Queue
 from typing import Any, Collection, Dict, Iterator, List, Optional, Set, Type
 
@@ -114,11 +114,13 @@ class UDFRunner(object):
         total_count = in_queue.qsize()
 
         # Create UDF Processes
+        lock = Lock()
         for i in range(parallelism):
             udf = self.udf_class(
                 in_queue=in_queue,
                 out_queue=out_queue,
                 worker_id=i,
+                lock=lock,
                 **self.udf_init_kwargs,
             )
             udf.apply_kwargs = kwargs
@@ -155,6 +157,7 @@ class UDF(Process):
         in_queue: Optional[Queue] = None,
         out_queue: Optional[Queue] = None,
         worker_id: int = 0,
+        lock: Lock = Lock(),
         **udf_init_kwargs: Any,
     ) -> None:
         """
@@ -165,6 +168,7 @@ class UDF(Process):
         self.in_queue = in_queue
         self.out_queue = out_queue
         self.worker_id = worker_id
+        self.lock = lock
 
         # We use a workaround to pass in the apply kwargs
         self.apply_kwargs: Dict[str, Any] = {}
@@ -178,7 +182,9 @@ class UDF(Process):
         # Each UDF starts its own Engine
         # See SQLalchemy, using connection pools with multiprocessing.
         engine = get_engine()
+        self.lock.acquire()
         connection = engine.connect()
+        self.lock.release()
         Session = sessionmaker(bind=engine)
         self.session = Session()
         while True:
