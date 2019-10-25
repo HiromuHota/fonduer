@@ -94,7 +94,6 @@ install:
 - cd psycopg2-2.8.4
 - sed -i -e 's/define =/define = PSYCOPG_DEBUG/' setup.cfg
 - cat setup.cfg
-- export PSYCOPG_DEBUG=1
 - python setup.py build
 - python setup.py install
 - cd ..
@@ -116,7 +115,7 @@ before_script:
 - cd tests && ./download_data.sh && cd ..
 
 script:
-- pytest
+- PSYCOPG_DEBUG=1 pytest
 
 after_success:
 - coveralls
