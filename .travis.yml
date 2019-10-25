@@ -116,7 +116,7 @@ before_script:
 - cd tests && ./download_data.sh && cd ..
 
 script:
-- coverage run --source=fonduer -m pytest tests
+- pytest
 
 after_success:
 - coveralls
