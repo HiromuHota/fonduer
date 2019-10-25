@@ -14,6 +14,9 @@ matrix:
   - os: osx
     osx_image: xcode11.2
     language: shell
+  - os: osx
+    osx_image: xcode9.4
+    language: shell
   fast_finish: true
 
 services:
