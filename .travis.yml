@@ -97,6 +97,7 @@ install:
 - export PSYCOPG_DEBUG=1
 - python setup.py build
 - python setup.py install
+- cd ..
 - make -s dev_extra
 - make check
 - make docs
