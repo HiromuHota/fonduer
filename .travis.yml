@@ -72,6 +72,8 @@ before_install:
     export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl@1.1/lib/
     # Show libpq for debugging
     brew info libpq
+    # Show pg config
+    pg_config
   fi
 - pdfinfo -v
 - psql --version
