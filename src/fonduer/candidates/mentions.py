@@ -586,7 +586,7 @@ class MentionExtractorUDF(UDF):
         """
 
         # Reattach doc with the current session or DetachedInstanceError happens
-        doc = self.session.merge(doc)
+        doc = self.session.merge(doc, load=False)
         # Iterate over each mention class
         for i, mention_class in enumerate(self.mention_classes):
             tc_to_insert: DefaultDict[Type, List[Dict[str, Any]]] = defaultdict(list)

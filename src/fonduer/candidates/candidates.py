@@ -267,7 +267,7 @@ class CandidateExtractorUDF(UDF):
         :param split: Which split to use.
         """
         # Reattach doc with the current session or DetachedInstanceError happens
-        doc = self.session.merge(doc)
+        doc = self.session.merge(doc, load=False)
 
         logger.debug(f"Document: {doc}")
         # Iterate over each candidate class
