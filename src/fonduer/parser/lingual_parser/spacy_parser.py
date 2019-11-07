@@ -1,12 +1,10 @@
 import importlib
 import logging
 from collections import defaultdict
-from pathlib import Path
 from string import whitespace
 from typing import Any, Collection, Dict, Iterator, List, Optional
 
 from spacy.language import Language
-from spacy.util import is_package
 from spacy.vocab import Vocab
 
 from fonduer.parser.lingual_parser.lingual_parser import LingualParser
@@ -14,8 +12,6 @@ from fonduer.parser.models.sentence import Sentence
 
 try:
     import spacy
-    from spacy.cli import download
-    from spacy import util
     from spacy.tokens import Doc
 except Exception:
     raise Exception("spaCy not installed. Use `pip install spacy`.")
@@ -74,26 +70,6 @@ class SpacyParser(LingualParser):
     def has_NLP_support(self) -> bool:
         return self.lang is not None and (self.lang in self.languages)
 
-    @staticmethod
-    def model_installed(name: str) -> bool:
-        """Check if spaCy language model is installed.
-
-        From https://github.com/explosion/spaCy/blob/master/spacy/util.py
-
-        :param name:
-        :return:
-        """
-        data_path = util.get_data_path()
-        if not data_path or not data_path.exists():
-            raise IOError(f"Can't find spaCy data path: {data_path}")
-        if name in {d.name for d in data_path.iterdir()}:
-            return True
-        if is_package(name):  # installed as package
-            return True
-        if Path(name).exists():  # path to model data directory
-            return True
-        return False
-
     def _load_lang_model(self) -> None:
         """
         Load spaCy language model or download if model is available and not
@@ -109,8 +85,6 @@ class SpacyParser(LingualParser):
         :return:
         """
         if self.lang in self.languages:
-            if not SpacyParser.model_installed(self.lang):
-                download(self.lang)
             model = spacy.load(self.lang)
         elif self.lang in self.alpha_languages:
             language_module = importlib.import_module(f"spacy.lang.{self.lang}")
