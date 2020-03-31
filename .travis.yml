@@ -121,7 +121,7 @@ before_script:
 - cd tests && ./download_data.sh && cd ..
 
 script:
-- travis-wait-enhanced --interval=1m --timeout=50m -- coverage run -m pytest tests
+- travis-wait-enhanced --interval=1m --timeout=50m -- coverage run -m pytest tests/utils/test_visualizer.py
 
 after_success:
 - coverage combine
