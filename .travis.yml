@@ -3,8 +3,6 @@ cache:
   - $HOME/.cache/pip
 before_cache:
   - rm -f $HOME/.cache/pip/log/debug.log
-env:
-  - MECABRC=/usr/local/etc/mecabrc
 
 matrix:
   include:
@@ -42,6 +40,7 @@ before_install:
     # Binary dictionary not included in 2.2.0-1 (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=788822)
     wget http://launchpadlibrarian.net/326401889/unidic-mecab_2.1.2~dfsg-7_all.deb
     sudo dpkg -i unidic-mecab_2.1.2~dfsg-7_all.deb
+    export MECABRC=/etc/mecabrc
 
     # Set the max number of connections 100
     # No need to adjust it on Mac as it's 100 by default
@@ -76,6 +75,7 @@ before_install:
     brew install swig mecab mecab-unidic
     # Use unidic-mecab dictionary
     sed -i -e "s/ipadic/unidic/" /usr/local/etc/mecabrc
+    export MECABRC=/usr/local/etc/mecabrc
 
     # Install ImageMagick library for Wand
     brew install freetype imagemagick ghostscript
