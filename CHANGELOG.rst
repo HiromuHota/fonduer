@@ -1,6 +1,11 @@
 Unreleased_
 -----------
 
+Changed
+^^^^^^^
+
+* `@HiromuHota`_: Log a stack trace on parsing error for better debug experience.
+
 0.8.2_ - 2020-04-28
 -------------------
 

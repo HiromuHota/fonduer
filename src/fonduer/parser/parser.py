@@ -279,7 +279,7 @@ class ParserUDF(UDF):
                     ]
             return document
         except Exception as e:
-            warnings.warn(
+            logging.exception(
                 (
                     f"Document {document.name} not added to database, "
                     f"because of parse error: \n{e}"
