@@ -368,7 +368,7 @@ class _FonduerWrapper(object):
         return predicted
 
 
-def _save_mention_classes(mention_classes: List[Mention], path: str):
+def _save_mention_classes(mention_classes: List[Mention], path: str) -> None:
     pickle.dump(
         [
             {
@@ -383,12 +383,12 @@ def _save_mention_classes(mention_classes: List[Mention], path: str):
     )
 
 
-def _load_mention_classes(path: str):
+def _load_mention_classes(path: str) -> None:
     for kwargs in pickle.load(open(os.path.join(path, "mention_classes.pkl"), "rb")):
         mention_subclass(**kwargs)
 
 
-def _save_candidate_classes(candidate_classes: List[Candidate], path: str):
+def _save_candidate_classes(candidate_classes: List[Candidate], path: str) -> None:
     pickle.dump(
         [
             {
@@ -407,7 +407,7 @@ def _save_candidate_classes(candidate_classes: List[Candidate], path: str):
     )
 
 
-def _load_candidate_classes(path: str):
+def _load_candidate_classes(path: str) -> None:
     for kwargs in pickle.load(open(os.path.join(path, "candidate_classes.pkl"), "rb")):
         # Convert the classnames of mention to mention_classes
         kwargs["args"] = [
